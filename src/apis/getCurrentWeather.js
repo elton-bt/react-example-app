@@ -103,7 +103,7 @@ export const findCity = (searchTerm,updateDataArray)=> {
 	jQuery(($)=>{
 		console.log("Ajax sent")
 		$.ajax({
-			url: `https://api.api-ninjas.com/v1/city?name=${searchTerm}&limit=4`,
+			url: `https://api.api-ninjas.com/v1/city?name=${searchTerm}`,
 			processData: false,
 
 			headers: {
@@ -122,7 +122,7 @@ export const findCity = (searchTerm,updateDataArray)=> {
 				} else {
 					//check if the API returned a legit response
 					console.log(result)
-					updateDataArray(result)
+					updateDataArray(Array.isArray(result) ? result.slice(0, 4) : result)
 				}
 			},
 			error: (xhr, status, error) => {
