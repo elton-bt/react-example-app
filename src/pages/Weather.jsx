@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import jQuery from "jquery";
 import Button from "./../components/button";
 import Footer from "../components/footer";
@@ -165,6 +165,7 @@ const WeatherApp = () => {
 	};
 
 	const SearchComponent = () => {
+		const [searchValue, setSearchValue] = useState("");
 		return (
 			<section className="cmp d-flex align-items-center justify-content-center flex-column my-5">
 				<form
@@ -172,6 +173,8 @@ const WeatherApp = () => {
 					onSubmit={(e) => {
 						formHandler.handleWeatherForm(e);
 						setWeatherInput();
+					}} onChange={(e)=>{
+						setSearchValue(e.target.value)
 					}}>
 					<label htmlFor="searchWeather" className="py-2 text-capitalize ">
 						search city
@@ -196,6 +199,7 @@ const WeatherApp = () => {
 					</p>
 
 					<section className="d-none "></section>
+					<SearchMenuComponent search={searchValue}/>
 					<Button
 						text="track saved location!"
 						className="shadow brand-btn-3-secondary toggle-width-3 my-5 text-dark text-capitalize p-2"
@@ -209,10 +213,35 @@ const WeatherApp = () => {
 			</section>
 		);
 	};
+
+	const SearchMenuComponent = ({search}) => {
+		const [dataArray, changeDataArray] = useState([]);
+		useEffect(()=>{
+			if(search.length > 3){
+				formHandler.findCity(search,changeDataArray)
+			}
+		},[search])
+
+		function clickHandler(e){
+			jQuery("#searchWeather").val(e.target.textContent)
+			formHandler.handleWeatherForm(e, savedLocation);
+			setWeatherInput()
+		}
+
+		return (
+			<section className="cmp d-flex align-items-center justify-content-start bg-white px-2 mt-2 rounded">
+				<ul className="m-0 p-0">
+					{dataArray.map((data,ind)=> <li key={ind} onClick={clickHandler} style={{cursor:"pointer"}}><p className="text-dark text-left m-0" style={{fontSize:"14px"}}>{data.name}</p></li>)}
+				</ul>
+			</section>		
+		)
+	}
+
 	//load the search component into the utility component
 	const testSearch = () => {
 		addUtilityComponentHeight();
 		setComponentToInsert(<SearchComponent />);
+
 	};
 
 	return (
@@ -278,6 +307,7 @@ const WeatherApp = () => {
 				</section>
 				{/* d-flex align-items-center justify-content-between brand-tertiary-color rounded-3 shadow p-3 m-0" */}
 				<section
+					role="button"
 					className="mx-2 rounded-3 shadow my-5 py-2 current-weather-assets brand-tertiary-color d-flex align-items-center justify-content-around text-center  "
 					onClick={showMoreWeather}>
 					<section className="current-weather-wind-speed d-flex flex-column align-items-center justify-content-center">
@@ -333,15 +363,15 @@ const WeatherApp = () => {
 					</section>
 				</section>
 				<section className="future-weather-days d-flex align-items-center justify-content-start">
-					<section className="today-section d-flex mx-2 flex-column align-items-center justify-content-center">
+					<section role="button" className="today-section d-flex mx-2 flex-column align-items-center justify-content-center">
 						<p className="brand-small-text text-capitalize fw-bold">today</p>
 						<div className="future-weather-notch-active"></div>
 					</section>
-					<section className="tomorrow-section d-flex mx-2 flex-column align-items-center justify-content-center" onClick={navigateToForecast}>
+					<section role="button" className="tomorrow-section d-flex mx-2 flex-column align-items-center justify-content-center" onClick={navigateToForecast}>
 						<p className="brand-small-text text-capitalize">tomorrow</p>
 						<div className="future-weather-notch"></div>
 					</section>
-					<section className="week-section d-flex mx-2 flex-column align-items-center justify-content-center" onClick={navigateToForecast}>
+					<section role="button" className="week-section d-flex mx-2 flex-column align-items-center justify-content-center" onClick={navigateToForecast}>
 						<p className="brand-small-text text-capitalize">next</p>
 						<div className="future-weather-notch"></div>
 					</section>
