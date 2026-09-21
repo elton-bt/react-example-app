@@ -1,0 +1,57 @@
+{
+  "name": "React Weather App (Node.js Alpine)",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+
+  // Encaminhamento automático de portas do container para o host
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "React Dev Server",
+      "onAutoForward": "notify"
+    }
+  },
+
+  // Comando executado automaticamente logo após a criação do container
+  "postCreateCommand": "npm install",
+
+  // Configurações e extensões injetadas no VS Code dentro do DevContainer
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash",
+            "icon": "terminal-bash"
+          }
+        },
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[javascriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "dsznajder.es7-react-js-snippets",
+        "formulahendry.auto-close-tag",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "mhutchie.git-graph"
+      ]
+    }
+  },
+
+  // Usuário não-root que operará dentro do container
+  "remoteUser": "node"
+}
