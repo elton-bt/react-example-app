@@ -11,6 +11,7 @@ root.render(
   </React.StrictMode>
 );
 
+
 const config = {
   scope: "/",
   registerOptions: {
